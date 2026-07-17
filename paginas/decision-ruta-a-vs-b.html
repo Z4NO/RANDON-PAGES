@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qué son la Ruta A y la Ruta B — documento de incorporación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2432; --paper:#FAFAF8; --card:#FFFFFF;
+    --a:#2A6DB0; --a-soft:#E8F0F8; --a-dark:#174B7E;
+    --b:#1B8A66; --b-soft:#E6F4EE; --b-dark:#0E5C43;
+    --warn:#B97A14; --warn-soft:#FBF3E2;
+    --muted:#6B6A63; --line:#E4E2DB; --line-strong:#C9C7BE;
+    --mono:'IBM Plex Mono',monospace; --body:'IBM Plex Sans',sans-serif; --disp:'Space Grotesk',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px 96px}
+  h1,h2,h3{font-family:var(--disp);font-weight:600;line-height:1.2}
+  .mono{font-family:var(--mono)}
+  p{color:#3A3F49}
+
+  /* Header */
+  header{padding:56px 0 0}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  h1{font-size:38px;margin:18px 0 14px;letter-spacing:-.01em}
+  .sub{font-size:16.5px;color:var(--muted);max-width:660px}
+  .sub b{color:var(--ink);font-weight:500}
+
+  /* Orden de lectura */
+  .reading{margin:34px 0 8px;border:1px solid var(--line-strong);border-radius:12px;background:var(--card);overflow:hidden}
+  .reading .rhead{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:12px 20px;border-bottom:1px solid var(--line);background:var(--paper)}
+  .flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:stretch}
+  .doc{padding:16px 18px}
+  .doc .step{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em}
+  .doc .nm{font-size:13.5px;font-weight:500;color:var(--ink);margin-top:4px;line-height:1.35}
+  .doc.here{background:var(--a-soft)}
+  .doc.here .nm{color:var(--a-dark)}
+  .doc.here .step{color:var(--a-dark)}
+  .arw{display:flex;align-items:center;justify-content:center;color:var(--line-strong);font-size:15px}
+
+  /* Secciones */
+  section{margin-top:60px}
+  .sec-label{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:26px}
+  .sec-label .n{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .sec-label h2{font-size:24px}
+  .lede{font-size:15px;color:var(--muted);max-width:660px;margin-bottom:26px}
+
+  /* Frase del proyecto */
+  .oneliner{background:var(--ink);color:#EDEDE8;border-radius:14px;padding:30px 32px}
+  .oneliner .q{font-family:var(--disp);font-size:21px;font-weight:500;line-height:1.4;color:#fff}
+  .oneliner .seq{font-family:var(--mono);font-size:12.5px;color:#A9C6E4;margin-top:18px;line-height:1.9;word-spacing:2px}
+  .constraints{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:22px}
+  .con{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .con .ct{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+  .con .cv{font-size:14px;font-weight:500;color:var(--ink);line-height:1.35}
+
+  /* Ranking de las 8 rutas */
+  .rank{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+  .rrow{display:grid;grid-template-columns:34px 1fr 130px 62px;align-items:center;gap:14px;padding:13px 18px;border-bottom:1px solid var(--line);font-size:14.5px}
+  .rrow:last-child{border-bottom:none}
+  .rrow .rk{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .rrow .rn{color:var(--ink)}
+  .rrow .rn b{font-weight:500}
+  .rrow .rn .who{font-family:var(--mono);font-size:10.5px;color:var(--muted);display:block;margin-top:2px}
+  .rrow .band{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:4px;text-align:center;white-space:nowrap}
+  .rrow .sc{font-family:var(--disp);font-size:22px;font-weight:600;text-align:right;color:var(--ink)}
+  .band.val{background:var(--a-soft);color:var(--a-dark)}
+  .band.cond{background:var(--warn-soft);color:var(--warn)}
+  .band.out{background:#F0EEE8;color:var(--muted)}
+  .rrow.mark-a{background:var(--a-soft)}
+  .rrow.mark-a .sc{color:var(--a)}
+  .rrow.mark-b{background:var(--b-soft)}
+  .rrow.mark-b .sc{color:var(--b)}
+  .rrow.mark-a .band,.rrow.mark-b .band{background:#fff}
+  .bandkey{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:16px;font-size:12.5px;color:var(--muted)}
+  .bandkey span{font-family:var(--mono);font-size:11.5px}
+
+  /* Tarjeta de ruta (explicación llana) */
+  .route{border:1px solid var(--line-strong);border-radius:14px;overflow:hidden;background:var(--card)}
+  .route .rhero{padding:26px 28px 22px;position:relative}
+  .route.a .rhero{background:linear-gradient(180deg,var(--a-soft),#fff)}
+  .route.b .rhero{background:linear-gradient(180deg,var(--b-soft),#fff)}
+  .route .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:4px;display:inline-block;margin-bottom:12px}
+  .route.a .tag{background:#fff;color:var(--a-dark);border:1px solid var(--a-soft)}
+  .route.b .tag{background:#fff;color:var(--b-dark);border:1px solid var(--b-soft)}
+  .route h3.rtitle{font-size:23px;margin-bottom:4px}
+  .route .plain{font-size:15.5px;color:#3A3F49;max-width:600px;margin-top:10px}
+  .route .rscore{position:absolute;top:24px;right:28px;text-align:right}
+  .route .rscore .num{font-family:var(--disp);font-size:44px;font-weight:600;line-height:1}
+  .route.a .rscore .num{color:var(--a)}
+  .route.b .rscore .num{color:var(--b)}
+  .route .rscore .lb{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.05em}
+  .route .rbody{padding:24px 28px 28px;display:grid;grid-template-columns:1fr 1fr;gap:22px 30px}
+  .rblock h4{font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;font-weight:500}
+  .rblock p{font-size:14px;line-height:1.6}
+  .rblock ul{list-style:none;font-size:14px}
+  .rblock li{padding:5px 0 5px 16px;position:relative;line-height:1.5}
+  .rblock li::before{content:"";position:absolute;left:0;top:12px;width:6px;height:6px;border-radius:2px}
+  .route.a .rblock li::before{background:var(--a)}
+  .route.b .rblock li::before{background:var(--b)}
+  .rblock li b{font-weight:500;color:var(--ink)}
+  .isnot{grid-column:1/-1;border-top:1px dashed var(--line);padding-top:18px}
+  .isnot .row{display:flex;gap:10px;align-items:flex-start;font-size:14px;padding:4px 0}
+  .isnot .x{font-family:var(--mono);color:var(--warn);font-weight:500;flex-shrink:0}
+  .isnot b{font-weight:500;color:var(--ink)}
+  .neck{grid-column:1/-1;background:var(--warn-soft);border:1px solid #EAD9B4;border-radius:10px;padding:16px 20px;font-size:14px}
+  .neck b{font-weight:500}
+  .strong{grid-column:1/-1;background:var(--b-soft);border:1px solid #BFE3D2;border-radius:10px;padding:16px 20px;font-size:14px}
+  .route.a .strong{background:var(--a-soft);border-color:#C4DBEF}
+  .strong b{font-weight:500}
+
+  /* Encaje con estudios */
+  .rubric{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:6px 0 26px}
+  .rc{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:11px 13px;text-align:center}
+  .rc .rcp{font-family:var(--disp);font-size:20px;font-weight:600;color:var(--ink)}
+  .rc .rcn{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.3}
+  .together{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--b);border-radius:0 10px 10px 0;padding:20px 24px;margin-top:8px}
+  .together h3{font-size:16.5px;margin-bottom:8px}
+  .together p{font-size:14.5px}
+  .together p+p{margin-top:8px}
+
+  /* Situación actual */
+  .bridge{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .bcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .bcard.a{border-top:4px solid var(--a)}
+  .bcard.b{border-top:4px solid var(--b)}
+  .bcard .bt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+  .bcard.a .bt{color:var(--a-dark)}
+  .bcard.b .bt{color:var(--b-dark)}
+  .bcard h3{font-size:17px;margin-bottom:8px}
+  .bcard p{font-size:14px;line-height:1.6}
+  .bcard p+p{margin-top:8px}
+  .pending{margin-top:18px;background:var(--ink);color:#EDEDE8;border-radius:12px;padding:22px 26px}
+  .pending .pl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#A9C6E4;margin-bottom:8px}
+  .pending h3{color:#fff;font-size:18px;margin-bottom:6px}
+  .pending p{color:#D7D9DC;font-size:14.5px}
+
+  footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  @media (max-width:680px){
+    h1{font-size:30px}
+    .flow{grid-template-columns:1fr}
+    .arw{transform:rotate(90deg);padding:2px 0}
+    .route .rbody{grid-template-columns:1fr}
+    .route .rscore{position:static;text-align:left;margin-top:14px}
+    .rrow{grid-template-columns:28px 1fr 56px;gap:10px}
+    .rrow .band{display:none}
+    .bridge{grid-template-columns:1fr}
+  }
+  @media print{
+    body{background:#fff}
+    section,.route,.rrow{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">Proyecto · fuentes de ingresos complementarias · documento de incorporación · jul 2026</p>
+  <h1>Qué son la Ruta A y la Ruta B</h1>
+  <p class="sub">Este proyecto busca crear <b>fuentes de ingresos complementarias a un trabajo principal</b>. Tras analizar el mercado, dos rutas quedaron por delante del resto: la A y la B. Esta página explica desde cero <b>qué es cada una, de dónde salen y en qué punto está la decisión</b>, para quien se incorpora ahora al grupo.</p>
+
+  <div class="reading">
+    <div class="rhead">Documentos del proyecto · orden sugerido de lectura</div>
+    <div class="flow">
+      <div class="doc"><span class="step">01 · marco</span><span class="nm">Guía de la fase exploratoria</span></div>
+      <div class="arw">→</div>
+      <div class="doc"><span class="step">02 · estudio</span><span class="nm">Estudio de mercado v2.0</span></div>
+      <div class="arw">→</div>
+      <div class="doc here"><span class="step">03 · incorporación</span><span class="nm">Qué son A y B (aquí)</span></div>
+      <div class="arw">→</div>
+      <div class="doc"><span class="step">04 · decisión</span><span class="nm">A vs B</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="proyecto">
+  <div class="sec-label"><span class="n">00</span><h2>El proyecto en una frase</h2></div>
+  <div class="oneliner">
+    <p class="q">Encontrar y validar fuentes de ingresos complementarias al trabajo principal, con inversión pequeña y controlada, comprobando antes que exista demanda en lugar de construir durante meses a ciegas.</p>
+    <p class="seq">analizar → contrastar → hipótesis → validar con bajo coste → medir → decidir → ejecutar → optimizar → automatizar → escalar</p>
+  </div>
+  <div class="constraints">
+    <div class="con"><div class="ct">Dedicación</div><div class="cv">Tiempo parcial, compatible con el trabajo principal</div></div>
+    <div class="con"><div class="ct">Inversión</div><div class="cv">Por niveles: &lt;50 € · 50-200 € · 200-500 €</div></div>
+    <div class="con"><div class="ct">Regla base</div><div class="cv">Validar antes de construir; no confundir interés con compra</div></div>
+    <div class="con"><div class="ct">Neutralidad</div><div class="cv">La IA solo suma si aporta una ventaja concreta, no por sí misma</div></div>
+  </div>
+</section>
+
+<section id="origen">
+  <div class="sec-label"><span class="n">01</span><h2>De dónde salen A y B</h2></div>
+  <p class="lede">A y B no son la idea del proyecto: son las <b>dos mejores puntuadas</b> de un universo de ocho rutas que el estudio de mercado v2.0 evaluó con una rúbrica neutral (sin puntos por usar IA). Ninguna llegó a «prioridad alta»; las dos primeras quedaron en la banda de <b>validar</b>.</p>
+
+  <div class="rank">
+    <div class="rrow mark-a">
+      <span class="rk">A</span>
+      <span class="rn"><b>Servicio productizado B2B por vertical</b><span class="who">hispano → inglés</span></span>
+      <span class="band val">Validar (parte alta)</span>
+      <span class="sc">78</span>
+    </div>
+    <div class="rrow mark-b">
+      <span class="rk">B</span>
+      <span class="rn"><b>Productos digitales de nicho</b><span class="who">English-first</span></span>
+      <span class="band val">Validar</span>
+      <span class="sc">74</span>
+    </div>
+    <div class="rrow">
+      <span class="rk">C</span>
+      <span class="rn"><b>Micro-SaaS vertical</b><span class="who">solo como evolución de A/B</span></span>
+      <span class="band val">Validar</span>
+      <span class="sc">74</span>
+    </div>
+    <div class="rrow">
+      <span class="rk">D</span>
+      <span class="rn"><b>Formación online especializada de nicho</b></span>
+      <span class="band val">Validar</span>
+      <span class="sc">72</span>
+    </div>
+    <div class="rrow">
+      <span class="rk">E</span>
+      <span class="rn"><b>Contenido y audiencia (newsletter de nicho)</b><span class="who">capa transversal, no ruta principal</span></span>
+      <span class="band val">Validar</span>
+      <span class="sc">70</span>
+    </div>
+    <div class="rrow">
+      <span class="rk">F</span>
+      <span class="rn"><b>Servicios silver economy productizados</b><span class="who">solo con vertical asíncrono</span></span>
+      <span class="band cond">Con ventaja</span>
+      <span class="sc">65</span>
+    </div>
+    <div class="rrow">
+      <span class="rk">G</span>
+      <span class="rn"><b>Ecommerce de nicho / print on demand</b></span>
+      <span class="band cond">Con ventaja</span>
+      <span class="sc">58</span>
+    </div>
+    <div class="rrow">
+      <span class="rk">H</span>
+      <span class="rn"><b>Contenido automatizado para plataformas</b><span class="who">descartada, se confirma</span></span>
+      <span class="band out">Descartada</span>
+      <span class="sc">~50</span>
+    </div>
+  </div>
+  <div class="bandkey">
+    <span>Bandas: <b style="color:var(--ink)">80-100</b> prioridad alta · <b style="color:var(--ink)">65-79</b> validar · <b style="color:var(--ink)">50-64</b> solo con ventaja especial · <b style="color:var(--ink)">&lt;50</b> descartar</span>
+  </div>
+</section>
+
+<section id="ruta-a">
+  <div class="sec-label"><span class="n">02</span><h2>Qué es la Ruta A</h2></div>
+
+  <div class="route a">
+    <div class="rhero">
+      <span class="tag">Ruta A</span>
+      <div class="rscore"><div class="num">78</div><div class="lb">/100 · validar</div></div>
+      <h3 class="rtitle">Servicio productizado B2B por vertical</h3>
+      <p class="plain">Vender a pequeñas empresas la <b>resolución estandarizada de un proceso concreto</b> (facturación, pedidos, atención, informes) como un paquete de alcance y precio fijos, no como una consultoría a medida. Se elige un sector —un «vertical»— y se repite la misma solución cliente tras cliente.</p>
+    </div>
+    <div class="rbody">
+      <div class="rblock">
+        <h4>Cómo funciona</h4>
+        <ul>
+          <li><b>Alcance y precio cerrados:</b> un paquete definido, no horas sueltas.</li>
+          <li><b>Proceso repetible:</b> la misma entrega estandarizada por cliente.</li>
+          <li><b>Vertical elegido:</b> gestorías/asesorías, corredurías de seguros, administradores de fincas o pequeño ecommerce español.</li>
+          <li><b>La IA es herramienta,</b> no etiqueta: se posiciona por el resultado del proceso, no por la tecnología.</li>
+        </ul>
+      </div>
+      <div class="rblock">
+        <h4>Economía</h4>
+        <ul>
+          <li><b>Ticket:</b> 1.500-3.000 € fijos + 150-300 €/mes de mantenimiento.</li>
+          <li><b>Infraestructura:</b> &lt;50 €/mes.</li>
+          <li><b>Recurrencia:</b> cuota de mantenimiento (7/10).</li>
+          <li><b>Techo:</b> escalar depende de estandarizar; hay límite de horas propias.</li>
+        </ul>
+      </div>
+      <div class="strong">
+        <b>Su punto fuerte (demanda 17/20):</b> es la ruta con la demanda mejor documentada. El obstáculo declarado de la pyme pequeña es coste de desarrollo e integración (53%, señal Packlink), un 37% dice estar dispuesta a pagar 21-100 €/mes (IONOS/YouGov) y hay competidores con precios públicos. Es la asimetría más clara entre demanda con presupuesto y oferta.
+      </div>
+      <div class="isnot">
+        <div class="row"><span class="x">No es</span><span><b>una agencia web</b> ni montar páginas para terceros — eso está expresamente prohibido en el proyecto.</span></div>
+        <div class="row"><span class="x">No es</span><span><b>SaaS.</b> Lo saturado es el SaaS genérico; un servicio productizado es un servicio con alcance y precio fijos.</span></div>
+        <div class="row"><span class="x">No es</span><span><b>consultoría a medida</b> con reuniones constantes: eso rompería la compatibilidad con el trabajo principal.</span></div>
+      </div>
+      <div class="neck">
+        <b>Su cuello de botella:</b> el servicio exige acceso a decisores B2B, y ahora mismo la red de contactos propia es cero. Sin red, validar A es lento y caro (contacto en frío). Ajustada a esa situación real, su puntuación baja de 78 a ~74 (velocidad 12→8/15).
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ruta-b">
+  <div class="sec-label"><span class="n">03</span><h2>Qué es la Ruta B</h2></div>
+
+  <div class="route b">
+    <div class="rhero">
+      <span class="tag">Ruta B</span>
+      <div class="rscore"><div class="num">74</div><div class="lb">/100 · validar</div></div>
+      <h3 class="rtitle">Productos digitales de nicho (English-first)</h3>
+      <p class="plain">Vender <b>recursos digitales que sistematizan un proceso</b> —plantillas, checklists operativos, sistemas de trabajo, mini-cursos— dirigidos a los profesionales de un vertical y publicados primero en inglés. El comprador se resuelve el problema en autoservicio en lugar de contratar a alguien.</p>
+    </div>
+    <div class="rbody">
+      <div class="rblock">
+        <h4>Cómo funciona</h4>
+        <ul>
+          <li><b>Producto empaquetado:</b> se crea una vez y se vende muchas.</li>
+          <li><b>English-first:</b> el mercado del producto digital en inglés multiplica el TAM (15-20x).</li>
+          <li><b>Venta directa:</b> con email propio desde el primer producto; marketplace (Etsy/Gumroad) solo como canal secundario.</li>
+          <li><b>Autoridad por vertical:</b> defendible solo con conocimiento real del sector y voz propia.</li>
+        </ul>
+      </div>
+      <div class="rblock">
+        <h4>Economía</h4>
+        <ul>
+          <li><b>Precio de entrada:</b> 19-49 € por producto.</li>
+          <li><b>Margen:</b> &gt;80%, sin coste marginal por venta.</li>
+          <li><b>Inversión total:</b> &lt;50 € (cabe en el nivel 1).</li>
+          <li><b>Operación 9/10:</b> la ruta más compatible con el trabajo principal de todo el estudio.</li>
+        </ul>
+      </div>
+      <div class="strong">
+        <b>Su punto fuerte:</b> inversión casi nula, margen alto y operación ligera. Se lanza en días y se puede testear de inmediato con coste ~0, sin depender de una red de contactos.
+      </div>
+      <div class="isnot">
+        <div class="row"><span class="x">Ojo</span><span><b>Demanda del producto concreto sin demostrar (12/20):</b> el mercado global es enorme, pero eso no prueba que se venda esta plantilla concreta hasta validarla.</span></div>
+        <div class="row"><span class="x">Ojo</span><span><b>Diferenciación 2/5:</b> saturación alta en lo genérico. La categoría «prompts/workflows de IA» es de las más saturadas; el posicionamiento defendible es por vertical y resultado.</span></div>
+        <div class="row"><span class="x">Ojo</span><span><b>Riesgo de plataforma:</b> si se vende solo en marketplace se depende de él. Mitigación obligatoria: email propio desde el día 1.</span></div>
+      </div>
+      <div class="neck">
+        <b>Su cuello de botella:</b> la venta orgánica sin audiencia también es lenta, y la decisión bloqueante sigue pendiente: <b>elegir el vertical</b>. Sin vertical hay dirección, no decisión.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="encaje">
+  <div class="sec-label"><span class="n">04</span><h2>Cómo encajan en los estudios</h2></div>
+  <p class="lede">Las dos se miden con la misma rúbrica neutral sobre 100. La IA no tiene puntuación propia: solo suma cuando produce una ventaja concreta en costes, velocidad, calidad, automatización, personalización, diferenciación o escalabilidad.</p>
+
+  <div class="rubric">
+    <div class="rc"><div class="rcp">20</div><div class="rcn">Demanda demostrable</div></div>
+    <div class="rc"><div class="rcp">15</div><div class="rcn">Velocidad de validación</div></div>
+    <div class="rc"><div class="rcp">15</div><div class="rcn">Margen y viabilidad</div></div>
+    <div class="rc"><div class="rcp">10</div><div class="rcn">Escalabilidad</div></div>
+    <div class="rc"><div class="rcp">10</div><div class="rcn">Recurrencia</div></div>
+    <div class="rc"><div class="rcp">10</div><div class="rcn">Operación</div></div>
+    <div class="rc"><div class="rcp">10</div><div class="rcn">Inversión inicial</div></div>
+    <div class="rc"><div class="rcp">5</div><div class="rcn">Diferenciación</div></div>
+    <div class="rc"><div class="rcp">5</div><div class="rcn">Riesgo</div></div>
+  </div>
+
+  <div class="together">
+    <h3>No son rivales en el estudio: son complementarias</h3>
+    <p>El estudio v2.0 no propuso elegir «A o B». Propuso <b>A como ruta principal a validar y B en paralelo con coste marginal cero</b>, porque comparten cliente y activos: el producto digital de B (plantilla, checklist, mini-curso) se deriva del mismo proceso y vertical del servicio de A, y sirve además de material de marketing de A.</p>
+    <p>La regla que las mantiene separadas sin dispersión: en fase 1, B solo consume subproductos del trabajo de A; nunca tiempo de producción propio. Ninguna alcanza «prioridad alta» sin validar primero.</p>
+  </div>
+</section>
+
+<section id="puente">
+  <div class="sec-label"><span class="n">05</span><h2>En qué punto está la decisión</h2></div>
+  <p class="lede">Con las dos rutas sobre la mesa y ante la situación real de hoy (red de contactos = 0), el proyecto ha ordenado así las prioridades entre ambas.</p>
+
+  <div class="bridge">
+    <div class="bcard a">
+      <div class="bt">Ruta A · pospuesta, reabrible</div>
+      <h3>Se aparca, no se descarta</h3>
+      <p>Su cuello de botella no es de mercado, es de acceso: sin red, la validación en frío cuesta meses. Se pospone y se reabre cuando el cuello esté resuelto con evidencia —audiencia cualificada en el vertical, problema repetido y señal de pago— no con sensaciones.</p>
+      <p>Estimación realista de reapertura: 3-6 meses con B en marcha.</p>
+    </div>
+    <div class="bcard b">
+      <div class="bt">Ruta B · dirección actual</div>
+      <h3>Se ejecuta primero</h3>
+      <p>Es testable de inmediato con coste ~0 y no depende de red propia. Se convierte en la vía de entrada precisamente porque el cuello de botella que hunde a A no la afecta.</p>
+      <p>A cambio hereda un riesgo declarado: 2-4 meses sin ingreso si se espera a «tener audiencia». Mitigación fijada: producto de pago pequeño en la semana 2-4 aunque la audiencia sea mínima.</p>
+    </div>
+  </div>
+
+  <div class="pending">
+    <p class="pl">Decisión que sigue bloqueante</p>
+    <h3>Elegir el vertical</h3>
+    <p>Candidatos heredados de los estudios: gestorías/asesorías, corredurías de seguros, administradores de fincas o pequeño ecommerce español. Es la pieza que falta tanto para A como para B, y sigue sin decidir.</p>
+  </div>
+</section>
+
+<footer>
+  <span>Documento de incorporación · basado en el estudio de mercado v2.0 (12 jul 2026)</span>
+  <span>Confianza: dirección alta · puntuaciones 65-78 media · cifras comerciales media-baja</span>
+</footer>
+
+</div>
+</body>
+</html>
