@@ -1,13 +1,336 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Página de ejemplo</title>
-  </head>
-  <body>
-    <h1>Página de ejemplo</h1>
-    <p>Este es un HTML estático publicado desde GitHub Pages.</p>
-    <p><a href="../index.html">Volver al inicio</a></p>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de decisión — Ruta A vs Ruta B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2432; --paper:#FAFAF8; --card:#FFFFFF;
+    --a:#2A6DB0; --a-soft:#E8F0F8; --a-dark:#174B7E;
+    --b:#1B8A66; --b-soft:#E6F4EE; --b-dark:#0E5C43;
+    --warn:#B97A14; --warn-soft:#FBF3E2;
+    --muted:#6B6A63; --line:#E4E2DB; --line-strong:#C9C7BE;
+    --mono:'IBM Plex Mono',monospace; --body:'IBM Plex Sans',sans-serif; --disp:'Space Grotesk',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px 96px}
+  h1,h2,h3{font-family:var(--disp);font-weight:600;line-height:1.2}
+  .mono{font-family:var(--mono)}
+
+  /* Header partido: A y B enfrentadas */
+  header{padding:56px 0 0}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .split{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;gap:0;margin:28px 0 12px;border:1px solid var(--line-strong);border-radius:14px;overflow:hidden;background:var(--card)}
+  .half{padding:28px 26px}
+  .half.a{border-right:1px dashed var(--line-strong)}
+  .half .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:4px;display:inline-block;margin-bottom:12px}
+  .half.a .tag{background:var(--a-soft);color:var(--a-dark)}
+  .half.b .tag{background:var(--b-soft);color:var(--b-dark)}
+  .half h2{font-size:20px;margin-bottom:6px}
+  .half .score{font-family:var(--disp);font-size:52px;font-weight:600;line-height:1}
+  .half.a .score{color:var(--a)}
+  .half.b .score{color:var(--b)}
+  .half .score small{font-size:16px;color:var(--muted);font-weight:400;font-family:var(--body)}
+  .vs{display:flex;align-items:center;justify-content:center;padding:0 4px;background:var(--paper);border-left:1px solid var(--line);border-right:1px solid var(--line)}
+  .vs span{font-family:var(--mono);font-size:12px;color:var(--muted);writing-mode:vertical-rl;letter-spacing:.3em;text-transform:uppercase}
+  .verdict{font-size:14px;color:var(--muted);margin-bottom:40px}
+  .verdict strong{color:var(--ink);font-weight:500}
+
+  /* Secciones tipo registro */
+  section{margin-top:64px}
+  .sec-label{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:28px}
+  .sec-label .n{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .sec-label h2{font-size:24px}
+  .lede{font-size:15px;color:var(--muted);max-width:640px;margin-bottom:28px}
+
+  /* Barras por criterio */
+  .crit{display:grid;grid-template-columns:190px 1fr 76px;gap:10px 16px;align-items:center;font-size:14px}
+  .crit .name{color:var(--ink)}
+  .crit .name .max{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .bars{display:flex;flex-direction:column;gap:4px;padding:6px 0}
+  .bar{height:12px;border-radius:0 3px 3px 0;position:relative;background:var(--line)}
+  .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:0 3px 3px 0;display:block}
+  .bar.a i{background:var(--a)}
+  .bar.b i{background:var(--b)}
+  .raw{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:right;line-height:1.5}
+  .raw b{color:var(--ink);font-weight:500}
+  .crit-note{grid-column:1/-1;font-size:13px;color:var(--muted);padding:2px 0 14px;border-bottom:1px dashed var(--line)}
+  .legend{display:flex;gap:20px;font-size:13px;color:var(--muted);margin-bottom:22px}
+  .legend span{display:flex;align-items:center;gap:7px}
+  .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+  .sw.a{background:var(--a)} .sw.b{background:var(--b)}
+
+  /* Tarjetas de corrección */
+  .fix{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:16px}
+  .fix .fh{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:8px}
+  .fix h3{font-size:16px}
+  .fix .was{font-family:var(--mono);font-size:11px;color:var(--warn);background:var(--warn-soft);padding:2px 8px;border-radius:4px;white-space:nowrap}
+  .fix p{font-size:14.5px;color:#3A3F49}
+  .fix p+p{margin-top:8px}
+
+  /* Mercados */
+  .mkt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:26px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+  .stat .lab{font-size:12.5px;color:var(--muted);margin-bottom:6px}
+  .stat .val{font-family:var(--disp);font-size:27px;font-weight:600;line-height:1.15}
+  .stat .src{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:8px;display:block}
+  .badge{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;display:inline-block;margin-top:8px}
+  .badge.hecho{background:#E6F4EE;color:#0E5C43}
+  .badge.est{background:#E8F0F8;color:#174B7E}
+  .badge.senal{background:var(--warn-soft);color:var(--warn)}
+  .mkt h3{font-size:18px;margin:34px 0 14px;display:flex;align-items:baseline;gap:10px}
+  .mkt h3 .rol{font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:400}
+  .mkt ul{list-style:none;font-size:14.5px}
+  .mkt li{padding:10px 0 10px 18px;border-bottom:1px dashed var(--line);position:relative;color:#3A3F49}
+  .mkt li::before{content:"";position:absolute;left:0;top:19px;width:7px;height:7px;border-radius:2px;background:var(--line-strong)}
+  .mkt li b{font-weight:500;color:var(--ink)}
+
+  /* Condiciones de reapertura */
+  .cond{counter-reset:c;display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+  .cond-item{counter-increment:c;display:grid;grid-template-columns:64px 1fr;border-bottom:1px solid var(--line)}
+  .cond-item:last-child{border-bottom:none}
+  .cond-item .num{display:flex;align-items:flex-start;justify-content:center;padding-top:22px;background:var(--a-soft)}
+  .cond-item .num::before{content:counter(c);font-family:var(--disp);font-size:22px;font-weight:600;color:var(--a-dark)}
+  .cond-item .body{padding:20px 24px}
+  .cond-item h3{font-size:15.5px;margin-bottom:5px}
+  .cond-item p{font-size:14px;color:#3A3F49}
+  .cond-item .thr{font-family:var(--mono);font-size:12px;color:var(--a-dark);background:var(--a-soft);padding:2px 8px;border-radius:4px;display:inline-block;margin-top:8px}
+  .rule{background:var(--ink);color:#EDEDE8;border-radius:12px;padding:22px 26px;margin-top:18px;font-size:14.5px}
+  .rule b{color:#fff;font-weight:500}
+  .rule .mono{color:#A9C6E4;font-size:12.5px}
+
+  /* Plan */
+  .plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .step{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--b);border-radius:0 0 10px 10px;padding:18px 20px}
+  .step .wk{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--b-dark);margin-bottom:8px}
+  .step h3{font-size:15px;margin-bottom:6px}
+  .step p{font-size:13.5px;color:#3A3F49}
+  .blocker{margin-top:22px;background:var(--warn-soft);border:1px solid #EAD9B4;border-radius:10px;padding:18px 22px;font-size:14.5px}
+  .blocker b{font-weight:500}
+
+  footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  @media (max-width:640px){
+    .split{grid-template-columns:1fr}
+    .half.a{border-right:none;border-bottom:1px dashed var(--line-strong)}
+    .vs{display:none}
+    .crit{grid-template-columns:1fr}
+    .crit .raw{text-align:left}
+  }
+  @media print{
+    body{background:#fff}
+    section{break-inside:avoid-page}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">Proyecto · fuentes de ingresos complementarias · registro de decisión · jul 2026</p>
+  <div class="split">
+    <div class="half a">
+      <span class="tag">Pospuesta · reabrible</span>
+      <h2>Ruta A — Servicio productizado B2B</h2>
+      <p class="score">~74 <small>/100 ajustada</small></p>
+      <p style="font-size:13.5px;color:var(--muted);margin-top:10px">78 con red de contactos. La ajustada refleja la situación real: contactos B2B = 0, sin problema identificado en un vertical.</p>
+    </div>
+    <div class="vs"><span>vs</span></div>
+    <div class="half b">
+      <span class="tag">Dirección actual</span>
+      <h2>Ruta B — Productos digitales de nicho</h2>
+      <p class="score">74 <small>/100</small></p>
+      <p style="font-size:13.5px;color:var(--muted);margin-top:10px">English-first. No depende de red propia. Pendiente de elegir vertical, que es la decisión bloqueante.</p>
+    </div>
+  </div>
+  <p class="verdict">Empate técnico en puntuación. La decisión no la resuelve el número: la resuelve <strong>qué cuello de botella se prefiere gestionar</strong> — acceso a decisores (A, meses en frío) o atención y demanda por validar (B, testable de inmediato con coste ~0).</p>
+</header>
+
+<section id="criterios">
+  <div class="sec-label"><span class="n">01</span><h2>Comparativa por criterio</h2></div>
+  <p class="lede">Rúbrica neutral del proyecto (sin puntos por encaje con IA). La ruta A se muestra con la velocidad ajustada a red = 0 (12→8/15). Barras en porcentaje del máximo de cada criterio.</p>
+  <div class="legend">
+    <span><i class="sw a"></i>Ruta A (ajustada)</span>
+    <span><i class="sw b"></i>Ruta B</span>
+  </div>
+  <div class="crit">
+    <span class="name">Demanda demostrable <span class="max">/20</span></span>
+    <div class="bars"><div class="bar a"><i style="width:85%"></i></div><div class="bar b"><i style="width:60%"></i></div></div>
+    <span class="raw"><b>17</b> · 12</span>
+    <p class="crit-note">A gana con claridad: gap documentado con fuentes oficiales y precios públicos. En B, el mercado global es enorme pero la demanda del producto concreto no está demostrada hasta validar.</p>
+
+    <span class="name">Velocidad validación <span class="max">/15</span></span>
+    <div class="bars"><div class="bar a"><i style="width:53%"></i></div><div class="bar b"><i style="width:67%"></i></div></div>
+    <span class="raw"><b>8</b> · <b>10</b></span>
+    <p class="crit-note">El criterio que cambió la decisión. Sin red, la validación de A es lenta y cara (contacto en frío). B se lanza en días, con la salvedad de que la venta orgánica sin audiencia también es lenta.</p>
+
+    <span class="name">Margen y viabilidad <span class="max">/15</span></span>
+    <div class="bars"><div class="bar a"><i style="width:87%"></i></div><div class="bar b"><i style="width:93%"></i></div></div>
+    <span class="raw">13 · <b>14</b></span>
+    <p class="crit-note">Ambas altas. B sin coste marginal por venta (&gt;80%); A con infraestructura &lt;50 €/mes y ticket 1.500-3.000 € + cuota.</p>
+
+    <span class="name">Escalabilidad <span class="max">/10</span></span>
+    <div class="bars"><div class="bar a"><i style="width:60%"></i></div><div class="bar b"><i style="width:90%"></i></div></div>
+    <span class="raw">6 · <b>9</b></span>
+    <p class="crit-note">B escala sin horas adicionales por venta. A tiene techo de horas propias hasta estandarizar.</p>
+
+    <span class="name">Recurrencia <span class="max">/10</span></span>
+    <div class="bars"><div class="bar a"><i style="width:70%"></i></div><div class="bar b"><i style="width:50%"></i></div></div>
+    <span class="raw"><b>7</b> · 5</span>
+    <p class="crit-note">A cobra cuota de mantenimiento. B es venta única salvo membresía o actualizaciones — mitigable con diseño del producto.</p>
+
+    <span class="name">Facilidad de operación <span class="max">/10</span></span>
+    <div class="bars"><div class="bar a"><i style="width:60%"></i></div><div class="bar b"><i style="width:90%"></i></div></div>
+    <span class="raw">6 · <b>9</b></span>
+    <p class="crit-note">B es la ruta más compatible con el trabajo principal de todo el estudio. A exige soporte y confianza continua con clientes B2B.</p>
+
+    <span class="name">Inversión inicial <span class="max">/10</span></span>
+    <div class="bars"><div class="bar a"><i style="width:90%"></i></div><div class="bar b"><i style="width:100%"></i></div></div>
+    <span class="raw">9 · <b>10</b></span>
+    <p class="crit-note">B cabe entera en el nivel 1 de validación (&lt;50 € en total).</p>
+
+    <span class="name">Diferenciación <span class="max">/5</span></span>
+    <div class="bars"><div class="bar a"><i style="width:80%"></i></div><div class="bar b"><i style="width:40%"></i></div></div>
+    <span class="raw"><b>4</b> · 2</span>
+    <p class="crit-note">Punto débil real de B: saturación alta en lo genérico. Solo defendible con vertical profundo y voz propia — de ahí que la elección de vertical sea la decisión crítica.</p>
+
+    <span class="name">Riesgo legal/plataforma <span class="max">/5</span></span>
+    <div class="bars"><div class="bar a"><i style="width:80%"></i></div><div class="bar b"><i style="width:60%"></i></div></div>
+    <span class="raw"><b>4</b> · 3</span>
+    <p class="crit-note">B depende de marketplace si vende en Etsy/Gumroad. Mitigación obligatoria: venta directa con email propio desde el primer producto; marketplace solo como canal secundario.</p>
+  </div>
+</section>
+
+<section id="correcciones">
+  <div class="sec-label"><span class="n">02</span><h2>Correcciones registradas a la valoración</h2></div>
+  <p class="lede">Tres errores de razonamiento detectados en la justificación del giro. La decisión se mantiene; el motivo registrado y la ejecución cambian.</p>
+
+  <div class="fix">
+    <div class="fh"><h3>A no se descarta "por saturación del SaaS"</h3><span class="was">Clasificación incorrecta</span></div>
+    <p>Un servicio productizado no es SaaS: es un servicio con alcance y precio fijos. Lo saturado es el SaaS genérico y las agencias genéricas; el estudio documentó bolsas verticales con poca competencia.</p>
+    <p>El motivo válido de descarte es el cuello de botella personal (contactos = 0, sin problema identificado). Importa registrarlo bien: si en 6 meses hay audiencia y credibilidad en un vertical, A se reabre con el cuello de botella resuelto.</p>
+  </div>
+
+  <div class="fix">
+    <div class="fh"><h3>"Nadie lee newsletters" contradice los datos del estudio</h3><span class="was">Opinión vs dato</span></div>
+    <p>El patrón dominante de monetización en 2026: contenido en redes para descubrimiento → email para conversión (2-5% free-to-paid) → producto digital para ingreso. Redes y email no son alternativas, son fases del mismo embudo.</p>
+    <p>Las redes son terreno alquilado (algoritmo, alcance decreciente); el email es el único activo de audiencia propio. Corrección práctica: captura de email desde el día 1 con un recurso gratuito descargable.</p>
+  </div>
+
+  <div class="fix">
+    <div class="fh"><h3>El coste del giro no estaba declarado: 2-4 meses sin ingreso</h3><span class="was">Riesgo omitido</span></div>
+    <p>El plan B + contenido social hereda la debilidad que el estudio penalizó en la ruta E (velocidad 6/15). El proyecto prohíbe priorizar modelos que exijan audiencia antes de monetizar.</p>
+    <p>Mitigación obligatoria: lanzar un producto pequeño de pago en la semana 2-4, aunque la audiencia sea de 100 personas, como señal de validación temprana. Esperar a "tener audiencia" para vender es el patrón de meses sin validación que el sistema prohíbe.</p>
+  </div>
+
+  <div class="fix">
+    <div class="fh"><h3>Precaución con el nicho "workflows con Claude"</h3><span class="was">Posicionamiento</span></div>
+    <p>La categoría prompts/workflows de IA en inglés está entre las más saturadas (diferenciación 2/5) y la aceptación del consumidor de contenido asociado a IA cayó del 60% al 26% (2023→2025).</p>
+    <p>El producto puede usar IA, pero el posicionamiento defendible es por vertical y resultado ("cómo un [profesión X] resuelve [proceso Y]"), no por herramienta. Y el plan solo cumple la distinción frente a la ruta H (descartada) si la idea, el criterio y la experiencia documentada son del autor — la IA acelera ejecución, no sustituye la voz.</p>
+  </div>
+</section>
+
+<section id="mercados">
+  <div class="sec-label"><span class="n">03</span><h2>Datos de los estudios de mercado (v2.0)</h2></div>
+  <p class="lede">Selección de los datos que sostienen la decisión, con su nivel de fiabilidad: hecho verificado, estimación o señal de mercado (fuente con interés comercial).</p>
+
+  <div class="mkt">
+    <h3>España / hispano <span class="rol">rol: entrada y validación · origen de activos</span></h3>
+    <div class="mkt-grid">
+      <div class="stat"><span class="lab">Crecimiento ecommerce 2026</span><span class="val">+7,4%</span><span class="src">eMarketer, jun 2026 · líder Europa Occ., ~58.250 M$</span><span class="badge hecho">Hecho</span></div>
+      <div class="stat"><span class="lab">Ventas ecommerce, un trimestre 2025</span><span class="val">29.296 M€</span><span class="src">CNMC · +19,3% interanual · ticket medio 57,62 €</span><span class="badge hecho">Hecho</span></div>
+      <div class="stat"><span class="lab">E-learning España, CAGR hasta 2033</span><span class="val">22,6%</span><span class="src">Grand View Research, may 2026 · base ~6.270 M$ (2025)</span><span class="badge est">Estimación</span></div>
+      <div class="stat"><span class="lab">Consumo concentrado en mayores de 55</span><span class="val">~60%</span><span class="src">EAE/CaixaBank 2026 · &gt;17 M personas · solo 21% de empresas con estrategia sénior</span><span class="badge hecho">Hecho</span></div>
+    </div>
+    <ul>
+      <li><b>Barrera declarada de la pyme pequeña:</b> coste de desarrollo e integración (53%) y falta de recursos técnicos — no solo IA. Sostiene la demanda de resolución de procesos. <span class="mono" style="font-size:11px">(Packlink, mar 2026 · señal)</span></li>
+      <li><b>Madurez del canal:</b> competir solo por precio es insostenible; la ventaja se desplaza a propuesta diferenciada y reputación. El crecimiento del canal no reduce la barrera del vendedor genérico.</li>
+      <li><b>Suscripción normalizada:</b> 26% de los adultos con 3+ suscripciones activas; crecimiento ~28% interanual en su última medición. Toda ruta debe diseñar componente recurrente. <span class="mono" style="font-size:11px">(Telecoming/UOC · estimación)</span></li>
+    </ul>
+
+    <h3>Global en inglés <span class="rol">rol: mercado primario del producto digital · escalado de servicios</span></h3>
+    <div class="mkt-grid">
+      <div class="stat"><span class="lab">Creator economy global</span><span class="val">&gt;250.000 M$</span><span class="src">Múltiples fuentes 2026 · proyección 480.000 M$ (Goldman Sachs, 2027)</span><span class="badge est">Estimación</span></div>
+      <div class="stat"><span class="lab">Conversión free-to-paid típica</span><span class="val">2-5%</span><span class="src">Patrón 2026: redes → email → producto digital (margen &gt;80%)</span><span class="badge est">Estimación</span></div>
+      <div class="stat"><span class="lab">Ingresos de creadores dependientes de terceros</span><span class="val">83%</span><span class="src">eMarketer 2026 · 59% patrocinios + 24% pagos de plataforma</span><span class="badge hecho">Hecho</span></div>
+      <div class="stat"><span class="lab">Aceptación del contenido IA sin voz humana</span><span class="val">60→26%</span><span class="src">Billion Dollar Boy/Censuswide · caída 2023→2025 · 52% preocupado por IA sin divulgación</span><span class="badge hecho">Hecho</span></div>
+    </div>
+    <ul>
+      <li><b>TAM del producto digital English-first:</b> 15-20x frente al hispano; ARPU de educación online en EE. UU. ~1.490 $. Motivo del English-first para todo producto.</li>
+      <li><b>Servicios productizados en expansión:</b> precios públicos documentados de ~500 a 5.995 $/mes, venta sin llamada comercial. La proliferación indica que el formato funciona; el diferenciador es el vertical. <span class="mono" style="font-size:11px">(señal)</span></li>
+      <li><b>POD/ecommerce genérico:</b> saturación explícita en las propias fuentes del sector (&gt;11.700 resultados publicitarios para "t-shirts" en Etsy); coste publicitario típico 2.500-12.000 $ — incompatible con los niveles de validación. Ruta G en banda baja (58/100). <span class="mono" style="font-size:11px">(señal)</span></li>
+    </ul>
+
+    <h3>Unión Europea <span class="rol">rol: diferenciador regulatorio · cantera de verticales</span></h3>
+    <div class="mkt-grid">
+      <div class="stat"><span class="lab">Ecommerce Europa Occidental 2026</span><span class="val">+5,8%</span><span class="src">eMarketer · ~705.390 M$</span><span class="badge hecho">Hecho</span></div>
+      <div class="stat"><span class="lab">AI Act, aplicación del grueso</span><span class="val">2 ago 2026</span><span class="src">Compliance como diferenciador exportable · 27% de pymes exige proveedor europeo</span><span class="badge hecho">Hecho</span></div>
+      <div class="stat"><span class="lab">E-learning europeo 2026</span><span class="val">~123.000 M$</span><span class="src">Market Data Forecast · CAGR 10,4% · corporativo al ~15%</span><span class="badge est">Estimación</span></div>
+      <div class="stat"><span class="lab">Mercado silver europeo</span><span class="val">6,4 B€</span><span class="src">Emprendedores/informes citados · consumo hogares 50+ ≈ 44% del total UE</span><span class="badge senal">Señal</span></div>
+    </div>
+    <ul>
+      <li><b>No es mercado de entrada:</b> fragmentación idiomática y confianza local en B2B pyme. Su valor es el ángulo RGPD + AI Act y la ventana táctica de agosto 2026.</li>
+      <li><b>Silver economy:</b> la mayor tendencia estructural detectada, pero sin vehículo compatible con las restricciones del proyecto. Registrada como cantera de verticales (recursos para cuidadores, formación digital sénior), no como ruta propia.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="reapertura">
+  <div class="sec-label"><span class="n">04</span><h2>Condiciones de reapertura de la ruta A</h2></div>
+  <p class="lede">A se cerró por un cuello de botella concreto. Se reabre cuando esté resuelto con evidencia, no con sensaciones. Estimación realista: 3-6 meses con la ruta B en marcha (coherente con la fase 2 del estudio).</p>
+  <div class="cond">
+    <div class="cond-item"><div class="num"></div><div class="body">
+      <h3>Audiencia cualificada en el vertical</h3>
+      <p>Sustituye a la red de contactos. Importa la composición, no la cifra: 200 gestores de fincas valen más que 5.000 curiosos. Verificación: poder nombrar 10-20 personas que encajan con el perfil de cliente.</p>
+      <span class="thr">≥300-500 emails o ≥1.000 seguidores del vertical</span>
+    </div></div>
+    <div class="cond-item"><div class="num"></div><div class="body">
+      <h3>Problema identificado y repetido</h3>
+      <p>El mismo dolor operativo mencionado espontáneamente por miembros de la audiencia, sin sugerirlo. Es el dato que A en frío habría costado semanas y que B genera como subproducto.</p>
+      <span class="thr">≥5-10 menciones espontáneas del mismo dolor</span>
+    </div></div>
+    <div class="cond-item"><div class="num"></div><div class="body">
+      <h3>Señal de disposición a pagar por resolución</h3>
+      <p>Al menos una: (a) ≥3 personas preguntando "¿puedes hacerlo tú por mí?"; (b) ≥1 petición de servicio con presupuesto mencionado; (c) ≥10 ventas sostenidas del producto digital del proceso.</p>
+      <span class="thr">(a) o (b) o (c)</span>
+    </div></div>
+    <div class="cond-item"><div class="num"></div><div class="body">
+      <h3>Credibilidad demostrable</h3>
+      <p>Contenido publicado documentando el proceso con resultados propios verificables. Convierte el primer contacto de "llamada en frío" a "ya sé quién eres". Una petición entrante fuerte (3b) puede compensarla parcialmente.</p>
+      <span class="thr">≥8-12 semanas de publicación</span>
+    </div></div>
+    <div class="cond-item"><div class="num"></div><div class="body">
+      <h3>Capacidad operativa disponible (veto)</h3>
+      <p>El servicio exige soporte continuo. Si B ya consume todo el tiempo disponible, A no se reabre aunque cumpla el resto — se prioriza escalar B.</p>
+      <span class="thr">Margen real para 1-2 clientes sin comprometer el trabajo</span>
+    </div></div>
+  </div>
+  <div class="rule">
+    <p><b>Regla de decisión:</b> 1, 2 y 3 son necesarias las tres; 4 acelera; 5 es veto. Cumplidas, A se reabre en versión reducida — un paquete, un proceso, precio fijo, 1-2 pilotos captados desde la propia audiencia — y pasa por el experimento de 14 días como cualquier ruta.</p>
+    <p class="mono" style="margin-top:10px">Qué no cuenta: que B vaya lenta o falle. Si B falla, se revisa B o se reevalúan rutas — no se vuelve a A por descarte, porque su cuello de botella seguiría sin resolver.</p>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="sec-label"><span class="n">05</span><h2>Ejecución acordada de la ruta B</h2></div>
+  <div class="plan">
+    <div class="step"><span class="wk">Previo · bloqueante</span><h3>Elegir vertical</h3><p>Basado en conocimiento o experiencia real propia. Sin vertical no hay decisión, solo dirección. Después: 1-2 plataformas, no 4, según dónde esté el vertical.</p></div>
+    <div class="step"><span class="wk">Día 1</span><h3>Captura de email desde el inicio</h3><p>Recurso gratuito descargable enlazado en cada contenido. Las redes descubren; el email convierte y es el único activo propio.</p></div>
+    <div class="step"><span class="wk">Semana 2-4</span><h3>Primer producto de pago (19-49 €)</h3><p>Aunque la audiencia sea mínima. Señal de validación temprana, no de facturación. Venta directa; marketplace solo secundario.</p></div>
+    <div class="step"><span class="wk">Día 1-14</span><h3>Métricas y abandono fijados antes</h3><p>Éxito: N seguidores/emails en 6 semanas y ≥3 ventas en las 2 semanas post-lanzamiento. Regla: no cambiar métricas tras un mal resultado. Nivel 1: &lt;50 €.</p></div>
+  </div>
+</section>
+
+<footer>
+  <span>Registro de decisión · estudio de mercado v2.0 (12 jul 2026)</span>
+  <span>Confianza: dirección alta · puntuaciones 65-78 media · cifras comerciales media-baja</span>
+</footer>
+
+</div>
+</body>
 </html>
